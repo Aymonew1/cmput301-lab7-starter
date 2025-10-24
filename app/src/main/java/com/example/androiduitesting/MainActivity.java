@@ -2,8 +2,10 @@ package com.example.androiduitesting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent; // added for ShowActivity navigation
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView; // added for item click listener
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         cityAdapter = new ArrayAdapter<>(this, R.layout.content, dataList);
 
-
         cityList.setAdapter(cityAdapter);
 
         final Button addButton = findViewById(R.id.button_add);
@@ -62,6 +63,22 @@ public class MainActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 cityAdapter.clear();
+            }
+        });
+
+        //  Open ShowActivity when a city is clicked
+
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get the selected city name
+                String selectedCity = dataList.get(position);
+                // create the intent to switch to ShowActivity
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                // attach the city name as extra
+                intent.putExtra("CITY_NAME", selectedCity);
+                // start ShowActivity
+                startActivity(intent);
             }
         });
     }
